@@ -16,17 +16,18 @@ p dev.video?
   100.times do |run|
 
     session.run_with(dev) do |connection|
-        File.open("x_1.jpg", 'wb') { |f| f.write connection.capture }
-        histogram =  Colorscore::Histogram.new('x_1.jpg').first
-        puts "WTF"
-        puts histogram
-        red = histogram.scores.first.last.red
-        green = histogram.scores.first.last.green
-        blue = histogram.scores.first.last.blue
-
-        screen_capture_color = LIFX::Color.rgb(red, green, blue)
-      light.set_color(screen_capture_color, duration: 1)  # Light#set_color is asynchronous
-      sleep 1                                    # Wait for light to finish changing
+        3.times do |i|
+          File.open("x_#{i}.jpg", 'wb') { |f| f.write connection.capture }
+        end
     end
+       histogram =  Colorscore::Histogram.new('x_2.jpg')
+       puts "##{histogram.scores.first.last.hex}"
+       red = histogram.scores.first.last.red
+       green = histogram.scores.first.last.green
+       blue = histogram.scores.first.last.blue
+
+       screen_capture_color = LIFX::Color.rgb(red, green, blue)
+     light.set_color(screen_capture_color, duration: 1)  # Light#set_color is asynchronous
+     sleep 1                                    # Wait for light to finish changing
 
 end
